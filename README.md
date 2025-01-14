@@ -22,9 +22,9 @@ This was on a system with 64Gb RAM and a 16Gb graphics card, so you may want to 
 1. Make sure status is set to "Running" in the top left
 1. Download the latest [PhotoFinder.zip](https://github.com/ruairiohagan/PhotoClassification/releases/tag/v1.0.0.1) from the releases area
 1. Unzip the file into a new folder and run the "PhotoFinder.exe" application.
-1. Check that the model you downloaded above is visible in the "Model Name" drop down and select it. ![Settings Tab](Screenshots\PF_Settings.png)
+1. Check that the model you downloaded above is visible in the "Model Name" drop down and select it. ![Settings Tab](Screenshots/PF_Settings.png)
 1. Use the "+" button to add folders to search for images - they will be searched recursively by default.
-1. Select the "Classify" tab and click "Classify" to start processing your images :) ![Classify Tab](Screenshots\PF_Classify.png)
+1. Select the "Classify" tab and click "Classify" to start processing your images :) ![Classify Tab](Screenshots/PF_Classify.png)
 
 Images and their generated description will be shown as they are processed on the classify tab.
 

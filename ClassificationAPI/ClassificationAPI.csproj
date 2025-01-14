@@ -10,4 +10,9 @@
     <ProjectReference Include="..\ClassificationData\ClassificationData.csproj" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <Version>1.0.0.1</Version>
+    <FileVersion>1.0.0.1</FileVersion>
+  </PropertyGroup>
+
 </Project>

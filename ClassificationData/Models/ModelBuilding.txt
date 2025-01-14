@@ -1,0 +1,12 @@
+Run the following command from the Package Manage Console to generate the models for the DB after CD'ing into the ClassificationData project folder:
+
+Scaffold-DbContext "Data Source=C:\Users\ruair\AppData\Roaming\PhotoClassification\PhotoClassification.db" Microsoft.EntityFrameworkCore.Sqlite -OutputDir Models -Project ClassificationData -startupproject ClassificationData -force
+
+Once generated, open the PhotoClassificationContext.cs file and replace the generated onconfiguring method with:
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.UseSqlite($"Data Source={DBController.DBFile}");
+
+Go through each of the tables definitions in that file and make them nullable, e.g. change the Settings sefinition to:
+
+public virtual DbSet<Setting>? Settings { get; set; }

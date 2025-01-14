@@ -1,0 +1,233 @@
+﻿<Window x:Class="PhotoFinder.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:bi="https://github.com/helluvamatt/BootstrapIcons.Wpf/"
+        xmlns:local="clr-namespace:PhotoFinder"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="Photo Finder" Height="900" Width="1200" Loaded="Window_Loaded">
+    <Window.Resources>
+        <local:FolderRecursiveIntToEnabledConverter x:Key="FolderRecursiveIntToEnabledConverter" />
+        <local:FolderNotRecursiveIntToEnabledConverter x:Key="FolderNotRecursiveIntToEnabledConverter" />
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <local:AntiBoolToVisibilityConverter x:Key="AntiBoolToVisibilityConverter" />
+        <local:PathToFileNameConverter x:Key="PathToFileNameConverter" />
+        <local:MStoSecondsConverter x:Key="MStoSecondsConverter" />
+        <local:MillisecondsToTimeDescConverter x:Key="MillisecondsToTimeDescConverter" />
+        <local:InvertedBooleanConverter x:Key="InvertedBooleanConverter" />
+        <local:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
+        
+        <Style x:Key="DetailStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,10,0,0" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TabControl x:Name="tabMain" RenderTransformOrigin="0.481,0.602">
+            <TabItem Header="Search">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="3*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="7*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Label Grid.Column="0" Grid.Row="0" Content="Search:"></Label>
+                        <TextBox Grid.Column="1" Grid.Row="0" x:Name="txtSearch" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" KeyDown="txtSearch_KeyDown" VerticalAlignment="Center"></TextBox>
+                        <Button Grid.Column="2" Grid.Row="0" Name="cmdSearch" Margin="1, 1, 1, 1" VerticalAlignment="Center" Click="cmdSearch_Click">
+                            <bi:BootstrapIcon Icon="Search" Width="16" Height="16"/>
+                        </Button>
+                    </Grid>
+                    <Grid Grid.Row="1" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <ListBox Grid.Row="0" Grid.Column="0" x:Name="listSearchResults" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedImage}" HorizontalContentAlignment="Center">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Image Grid.Row="0" Grid.Column="0" Height="140" Stretch="Uniform" Source="{Binding ImagePath}"></Image>
+                                        <TextBlock Text="{Binding ImagePath, Converter={StaticResource PathToFileNameConverter}}" 
+                                                   HorizontalAlignment="Center" Background="White" VerticalAlignment="Bottom"
+                                                   Padding="2, 0, 2, 0"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                    <Grid Grid.Row="0" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="4*" />
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="4*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Total Images Classified:" Margin="30, 0, 0, 0"></TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ImageCount}" Margin="30, 0, 0, 0"></TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="2" Text="Total Classification Time:" Margin="30, 0, 0, 0"></TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding ImageClassDurationMS, Converter={StaticResource MillisecondsToTimeDescConverter}}" Margin="30, 0, 0, 0"></TextBlock>
+                    </Grid>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Visibility="{Binding SelectedImage, Converter={StaticResource ObjectToVisibilityConverter}}">
+                        <Image Source="{Binding SelectedImage.ImagePath}" MaxHeight="600"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="{Binding SelectedImage.ImagePath}" Style="{StaticResource DetailStyle}"></TextBlock>
+                            <Button Name="cmdOpenImage" Margin="10, 3, 3, 0" ToolTip="Open" Click="cmdOpenImage_Click">
+                                <bi:BootstrapIcon Icon="FileImage" Width="16" Height="16"/>
+                            </Button>
+                            <Button Name="cmdOpenInExplorer" Margin="3, 3, 3, 0" ToolTip="Open folder" Click="cmdOpenInExplorer_Click">
+                                <bi:BootstrapIcon Icon="Folder2Open" Width="16" Height="16"/>
+                            </Button>
+                        </StackPanel>                        
+                        <TextBlock Text="{Binding SelectedImage.Description}"  Style="{StaticResource DetailStyle}" TextWrapping="Wrap"></TextBlock>
+                        <TextBlock Text="{Binding SelectedImage.ImageDate, StringFormat='Image date: {0}'}" Style="{StaticResource DetailStyle}"></TextBlock>
+                        <TextBlock Text="{Binding SelectedImage.ModelUsed, StringFormat='Model used: {0}'}" Style="{StaticResource DetailStyle}"></TextBlock>
+                        <TextBlock Text="{Binding SelectedImage.DescriptionDate, StringFormat='Description generated on: {0}'}" Style="{StaticResource DetailStyle}"></TextBlock>
+                        <TextBlock Text="{Binding SelectedImage.ClassificationMs, StringFormat='Time to generate: {0:F2} seconds', Converter={StaticResource MStoSecondsConverter}}" Style="{StaticResource DetailStyle}"></TextBlock>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Classify">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="5*" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Grid.Column="0" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="4*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Button Grid.Row="0" Grid.Column="0" x:Name="cmdClearClass" Width="140" IsEnabled="{Binding BusyClassifying, Converter={StaticResource InvertedBooleanConverter}}" Click="cmdClearClass_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Clear Classifications" Visibility="{Binding BusyClearing, Converter={StaticResource AntiBoolToVisibilityConverter}}"></TextBlock>
+                                <Grid Width="70" Visibility="{Binding BusyClearing, Converter={StaticResource BoolToVisibilityConverter}}" ToolTip="Click to cancel" >
+                                    <ProgressBar Value="{Binding ClearProgress}"></ProgressBar>
+                                    <TextBlock Text="{Binding ClearProgress, StringFormat={}{0:0}%}" HorizontalAlignment="Center"></TextBlock>
+                                </Grid>
+                                <bi:BootstrapIcon Icon="EraserFill" Width="16" Height="16" ToolTip="Erase all classifications" Margin="6, 0, 0, 0" Visibility="{Binding BusyClearing, Converter={StaticResource AntiBoolToVisibilityConverter}}"/>
+                                <bi:BootstrapIcon Icon="Stop" Width="16" Height="16" ToolTip="Cancel erasure" Margin="6, 0, 0, 0" Visibility="{Binding BusyClearing, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            </StackPanel>
+                        </Button>
+                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="Total Images Classified:" Margin="30, 0, 0, 0"></TextBlock>
+                            <TextBlock Text="{Binding ImageCount}" Margin="30, 0, 0, 0"></TextBlock>
+                            <TextBlock Text="Total Classification Time:" Margin="30, 0, 0, 0"></TextBlock>
+                            <TextBlock Text="{Binding ImageClassDurationMS, Converter={StaticResource MillisecondsToTimeDescConverter}}" Margin="30, 0, 0, 0"></TextBlock>
+                        </StackPanel>
+                        <Button Grid.Row="0" Grid.Column="2" x:Name="cmdClassify" Width="120" Click="cmdClassify_Click" IsEnabled="{Binding BusyClearing, Converter={StaticResource InvertedBooleanConverter}}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Classify" Visibility="{Binding BusyClassifying, Converter={StaticResource AntiBoolToVisibilityConverter}}"></TextBlock>
+                                <Grid Width="70" Visibility="{Binding BusyClassifying, Converter={StaticResource BoolToVisibilityConverter}}" ToolTip="Click to cancel" >
+                                    <ProgressBar Value="{Binding ClassProgress}"></ProgressBar>
+                                    <TextBlock Text="{Binding ClassProgress, StringFormat={}{0:0}%}" HorizontalAlignment="Center"></TextBlock>
+                                </Grid>
+                                <bi:BootstrapIcon Icon="Play" Width="16" Height="16" ToolTip="Start classifying images" Margin="6, 0, 0, 0" Visibility="{Binding BusyClassifying, Converter={StaticResource AntiBoolToVisibilityConverter}}"/>
+                                <bi:BootstrapIcon Icon="Stop" Width="16" Height="16" ToolTip="Cancel Classification" Margin="6, 0, 0, 0" Visibility="{Binding BusyClassifying, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Name="txtStatus" HorizontalAlignment="Center" Text="{Binding ClassificationStatus}"></TextBlock>
+                    <Image Grid.Row="2" Grid.Column="0" x:Name="imgLastPhoto" Stretch="Uniform" Source="{Binding LastProcessedImage}"></Image>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Name="txtSLastPhotoFile" HorizontalAlignment="Center" Text="{Binding LastProcessedImage}"></TextBlock>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Name="txtSLastPhotoDescription" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding LastDescription}"></TextBlock>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Settings" Height="20" VerticalAlignment="Center" HorizontalAlignment="Left" Width="55">
+                <StackPanel Orientation="Vertical">
+                    <Grid Margin="0, 20, 0, 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="9*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <Label Grid.Column="1" Grid.Row="0" x:Name="lblLMStudioLocation" Content="LMStudio Location:"/>
+                        <TextBox Grid.Column="2" Grid.Row="0" x:Name="textLMStudioLocation" TextWrapping="Wrap" Text="{Binding Settings.APILocation, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="400" TextChanged="textLMStudioLocation_TextChanged" LostFocus="textLMStudioLocation_LostFocus"/>
+                        <Label Grid.Column="1" Grid.Row="1" x:Name="lblModelName" Content="Model Name:"/>
+                        <ComboBox Grid.Column="2" Grid.Row="1" x:Name="comboModelName" 
+                                  SelectedItem="{Binding Settings.ImageModel}"
+                                  ItemsSource="{Binding Models}"                                  
+                                  IsEditable="False" HorizontalAlignment="Left" VerticalAlignment="Center" Width="400"/>
+                        <Label Grid.Column="1" Grid.Row="2" x:Name="lblClassificationQuestion" Content="Classification Question:"/>
+                        <TextBox Grid.Column="2" Grid.Row="2" x:Name="textClassificationQuestion" Text="{Binding Settings.ClassificationQuestion, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="400"/>
+                        <Label Grid.Column="1" Grid.Row="3" x:Name="lblTimeout" Content="Timout in Milliseconds:"/>
+                        <TextBox Grid.Column="2" Grid.Row="3" x:Name="textTimeouit" Text="{Binding Settings.TimeoutInMS, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="400"/>
+                        <Label Grid.Column="1" Grid.Row="4" x:Name="lblImageFolders" Content="Image Folders:"/>
+                        <Grid Grid.Column="2" Grid.Row="4" x:Name="spImageFolders" HorizontalAlignment="Left" VerticalAlignment="Center" Width="400">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="25" />
+                                <ColumnDefinition Width="25" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <ListBox Grid.Column="0" Grid.Row="0" Name="listImageFolders" 
+                                     ItemsSource="{Binding ImageFolders}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Name="cmdRecursive" Click="cmdRecursive_Click" Margin="1, 0, 5, 0">
+                                                <StackPanel Orientation="Vertical">
+                                                    <bi:BootstrapIcon Icon="FolderSymlink" Width="16" Height="16" ToolTip="Recursive folder search" Visibility="{Binding Recursive, Converter={StaticResource FolderRecursiveIntToEnabledConverter}}"/>
+                                                    <bi:BootstrapIcon Icon="FolderMinus" Width="16" Height="16" ToolTip="Search this folder only" Visibility="{Binding Recursive, Converter={StaticResource FolderNotRecursiveIntToEnabledConverter}}"/>
+                                                </StackPanel>
+                                            </Button>
+                                            <TextBlock Text="{Binding FolderPath}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <Button Name="cmdAddImageFolder" Grid.Column="1" Grid.Row="0" Margin="1, 1, 1, 1" Click="cmdAddImageFolder_Click" VerticalAlignment="Top">
+                                <bi:BootstrapIcon Icon="PlusCircle" Width="16" Height="16"/>
+                            </Button>
+                            <Button Name="cmdDelImageFolder" Grid.Column="2" Grid.Row="0" Margin="1, 1, 1, 1" Click="cmdDelImageFolder_Click" VerticalAlignment="Top">
+                                <bi:BootstrapIcon Icon="Trash" Width="16" Height="16"/>
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>

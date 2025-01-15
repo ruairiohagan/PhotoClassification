@@ -90,7 +90,7 @@
                         <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding ImageClassDurationMS, Converter={StaticResource MillisecondsToTimeDescConverter}}" Margin="30, 0, 0, 0"></TextBlock>
                     </Grid>
                     <DockPanel Grid.Row="1" Grid.Column="1" Visibility="{Binding SelectedImage, Converter={StaticResource ObjectToVisibilityConverter}}">
-                        <StackPanel DockPanel.Dock="Bottom">
+                        <StackPanel DockPanel.Dock="Bottom" Margin="10, 0, 10, 10">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <TextBlock Text="{Binding SelectedImage.ImagePath}" Style="{StaticResource DetailStyle}"></TextBlock>
                                 <Button Name="cmdOpenImage" Margin="10, 3, 3, 0" ToolTip="Open" Click="cmdOpenImage_Click">
@@ -104,7 +104,7 @@
                             <TextBlock Text="{Binding SelectedImage.ImageDate, StringFormat='Image date: {0}'}" Style="{StaticResource DetailStyle}"></TextBlock>
                             <TextBlock Text="{Binding SelectedImage.ModelUsed, StringFormat='Model used: {0}'}" Style="{StaticResource DetailStyle}"></TextBlock>
                             <TextBlock Text="{Binding SelectedImage.DescriptionDate, StringFormat='Description generated on: {0}'}" Style="{StaticResource DetailStyle}"></TextBlock>
-                            <TextBlock Text="{Binding SelectedImage.ClassificationMs, StringFormat='Time to generate: {0:F2} seconds', Converter={StaticResource MStoSecondsConverter}}" Style="{StaticResource DetailStyle}"></TextBlock>
+                            <TextBlock Text="{Binding SelectedImage.ClassificationMs, StringFormat='Time to generate: {0:F2} seconds', Converter={StaticResource MStoSecondsConverter}}" Style="{StaticResource DetailStyle}"/>
                         </StackPanel>
 
                         <Grid>
@@ -121,11 +121,9 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20" />
                         <RowDefinition Height="20" />
-                        <RowDefinition Height="5*" />
-                        <RowDefinition Height="20" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Grid.Column="0" >
+                    <Grid Grid.Row="0" Grid.Column="0" Margin="0, 0, 0, 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="4*" />
@@ -163,10 +161,14 @@
                             </StackPanel>
                         </Button>
                     </Grid>
-                    <TextBlock Grid.Row="1" Grid.Column="0" Name="txtStatus" HorizontalAlignment="Center" Text="{Binding ClassificationStatus}"></TextBlock>
-                    <Image Grid.Row="2" Grid.Column="0" x:Name="imgLastPhoto" Stretch="Uniform" Source="{Binding LastProcessedImage}"></Image>
-                    <TextBlock Grid.Row="3" Grid.Column="0" Name="txtSLastPhotoFile" HorizontalAlignment="Center" Text="{Binding LastProcessedImage}"></TextBlock>
-                    <TextBlock Grid.Row="4" Grid.Column="0" Name="txtSLastPhotoDescription" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding LastDescription}"></TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Name="txtStatus" HorizontalAlignment="Center" Text="{Binding ClassificationStatus}" Margin="0, 0, 0, 0"/>
+                    <DockPanel Grid.Row="2" Grid.Column="0">
+                        <StackPanel DockPanel.Dock="Bottom">
+                            <TextBlock Grid.Row="3" Grid.Column="0" Name="txtSLastPhotoFile" HorizontalAlignment="Center" Text="{Binding LastProcessedImage}" Margin="20, 5, 20, 5"></TextBlock>
+                            <TextBlock Grid.Row="4" Grid.Column="0" Name="txtSLastPhotoDescription" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding LastDescription}" Margin="20, 5, 20, 10"></TextBlock>
+                        </StackPanel>
+                        <Image Grid.Row="2" Grid.Column="0" x:Name="imgLastPhoto" Stretch="Uniform" Source="{Binding LastProcessedImage}"></Image>
+                    </DockPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="Settings" Height="20" VerticalAlignment="Center" HorizontalAlignment="Left" Width="55">

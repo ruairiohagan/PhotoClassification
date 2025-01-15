@@ -89,23 +89,28 @@
                         <TextBlock Grid.Row="0" Grid.Column="2" Text="Total Classification Time:" Margin="30, 0, 0, 0"></TextBlock>
                         <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding ImageClassDurationMS, Converter={StaticResource MillisecondsToTimeDescConverter}}" Margin="30, 0, 0, 0"></TextBlock>
                     </Grid>
-                    <StackPanel Grid.Row="1" Grid.Column="1" Visibility="{Binding SelectedImage, Converter={StaticResource ObjectToVisibilityConverter}}">
-                        <Image Source="{Binding SelectedImage.ImagePath}" MaxHeight="600"/>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <TextBlock Text="{Binding SelectedImage.ImagePath}" Style="{StaticResource DetailStyle}"></TextBlock>
-                            <Button Name="cmdOpenImage" Margin="10, 3, 3, 0" ToolTip="Open" Click="cmdOpenImage_Click">
-                                <bi:BootstrapIcon Icon="FileImage" Width="16" Height="16"/>
-                            </Button>
-                            <Button Name="cmdOpenInExplorer" Margin="3, 3, 3, 0" ToolTip="Open folder" Click="cmdOpenInExplorer_Click">
-                                <bi:BootstrapIcon Icon="Folder2Open" Width="16" Height="16"/>
-                            </Button>
-                        </StackPanel>                        
-                        <TextBlock Text="{Binding SelectedImage.Description}"  Style="{StaticResource DetailStyle}" TextWrapping="Wrap"></TextBlock>
-                        <TextBlock Text="{Binding SelectedImage.ImageDate, StringFormat='Image date: {0}'}" Style="{StaticResource DetailStyle}"></TextBlock>
-                        <TextBlock Text="{Binding SelectedImage.ModelUsed, StringFormat='Model used: {0}'}" Style="{StaticResource DetailStyle}"></TextBlock>
-                        <TextBlock Text="{Binding SelectedImage.DescriptionDate, StringFormat='Description generated on: {0}'}" Style="{StaticResource DetailStyle}"></TextBlock>
-                        <TextBlock Text="{Binding SelectedImage.ClassificationMs, StringFormat='Time to generate: {0:F2} seconds', Converter={StaticResource MStoSecondsConverter}}" Style="{StaticResource DetailStyle}"></TextBlock>
-                    </StackPanel>
+                    <DockPanel Grid.Row="1" Grid.Column="1" Visibility="{Binding SelectedImage, Converter={StaticResource ObjectToVisibilityConverter}}">
+                        <StackPanel DockPanel.Dock="Bottom">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding SelectedImage.ImagePath}" Style="{StaticResource DetailStyle}"></TextBlock>
+                                <Button Name="cmdOpenImage" Margin="10, 3, 3, 0" ToolTip="Open" Click="cmdOpenImage_Click">
+                                    <bi:BootstrapIcon Icon="FileImage" Width="16" Height="16"/>
+                                </Button>
+                                <Button Name="cmdOpenInExplorer" Margin="3, 3, 3, 0" ToolTip="Open folder" Click="cmdOpenInExplorer_Click">
+                                    <bi:BootstrapIcon Icon="Folder2Open" Width="16" Height="16"/>
+                                </Button>
+                            </StackPanel>
+                            <TextBlock Text="{Binding SelectedImage.Description}"  Style="{StaticResource DetailStyle}" TextWrapping="Wrap"></TextBlock>
+                            <TextBlock Text="{Binding SelectedImage.ImageDate, StringFormat='Image date: {0}'}" Style="{StaticResource DetailStyle}"></TextBlock>
+                            <TextBlock Text="{Binding SelectedImage.ModelUsed, StringFormat='Model used: {0}'}" Style="{StaticResource DetailStyle}"></TextBlock>
+                            <TextBlock Text="{Binding SelectedImage.DescriptionDate, StringFormat='Description generated on: {0}'}" Style="{StaticResource DetailStyle}"></TextBlock>
+                            <TextBlock Text="{Binding SelectedImage.ClassificationMs, StringFormat='Time to generate: {0:F2} seconds', Converter={StaticResource MStoSecondsConverter}}" Style="{StaticResource DetailStyle}"></TextBlock>
+                        </StackPanel>
+
+                        <Grid>
+                            <Image Source="{Binding SelectedImage.ImagePath}"/>
+                        </Grid>
+                    </DockPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="Classify">

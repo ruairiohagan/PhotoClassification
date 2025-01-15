@@ -1,11 +1,11 @@
 # PhotoClassification
 
-A widnows application that uses the LM Studio API to classify and describe image files with local AI then allows keyword searches to be performed to quickly find images.
+A windows application that uses the LM Studio API to classify and describe image files with local AI then allows keyword searches to be performed to quickly find images.
 
 ## Installation
 
 ### Overview
-The app uses [LM Studio](https://lmstudio.ai/) to classify the images, so this must be installed and configured first before any classification can be done (however, once classification is complete, searches do not need a conneciton to LM Studio).
+The app uses [LM Studio](https://lmstudio.ai/) to classify the images, so this must be installed and configured first before any classification can be done (however, once classification is complete, searches do not need a connection to LM Studio).
 
 In my testing I used the **llava-1.6-mistral-7b** model which produced impressive results for me while taking 10 to 15 seconds to index an image.
 This was on a system with 64Gb RAM and a 16Gb graphics card, so you may want to experiment with other models for better performance.

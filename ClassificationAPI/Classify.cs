@@ -31,7 +31,9 @@ namespace ClassificationAPI
                 ImagePath = "",
                 Progress = 0 })) return;
 
-            string[] fileList = Directory.GetFiles(folderPath, "*.jpg", recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+            string[] fileTypes = ["*.jpg", "*.jpeg", "*.tif", "*.tiff", "*.png"];
+            string[] fileList = fileTypes.SelectMany(ft => Directory.GetFiles(folderPath, ft, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly)).ToArray();
+
             int curFileIndex = 0;
             foreach (string file in fileList)
             {

@@ -7,12 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="9.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ClassificationData\ClassificationData.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
-    <Version>1.0.0.3</Version>
-    <FileVersion>1.0.0.3</FileVersion>
+    <Version>1.0.0.4</Version>
+    <FileVersion>1.0.0.4</FileVersion>
   </PropertyGroup>
 
 </Project>
